@@ -53,7 +53,7 @@ namespace HighSpeedRacer
 
         int counter = 0;
         int obstacleCounter = 0;
-        int obstacleFrenq = 40;
+        int obstacleFrenq = 50;
 
         bool running = false;
         bool endScreen = false;
@@ -141,7 +141,7 @@ namespace HighSpeedRacer
                 #endregion
 
                 #region Deicde lane and frenquency
-                if (obstacleCounter > obstacleFrenq)
+                if (obstacleCounter >= obstacleFrenq)
                 {
                     int i = randGen.Next(1, 4);
                     if(i == 1)
@@ -218,7 +218,7 @@ namespace HighSpeedRacer
 
                 #endregion
 
-                #region Intersections
+                #region Intersections and clear
                 Rectangle playerRec = new Rectangle(carX, 460 + 30, 150, 40);
                 Rectangle leftRec = new Rectangle(leftObstacleX, leftObstacleY + 50, obstacleWidth[left], 40);
                 Rectangle centerRec = new Rectangle(centerObstacleX, centerObstacleY + 50, obstacleWidth[centerOb], 40);
@@ -248,15 +248,16 @@ namespace HighSpeedRacer
                     rightObstacleY = 150;
                     obstacleHeight[right] = 50;
                     obstacleWidth[right] = 100;
-
-                    carX = 360;
+                    lastScore = 0;
+                    obstacleFrenq = 50;
                 }
                 #endregion
 
                 //increase car frequncy 
-                if (score > lastScore + 0.5)
+                if (score > lastScore + 0.2)
                 {
                     obstacleFrenq -= 5;
+                    speed = speed + 5;
                     lastScore = score;
                 }
             }
@@ -303,6 +304,7 @@ namespace HighSpeedRacer
                         endScreen = false;
                         insturctionLabel.Visible = true;
                         introLabel.Visible = true;
+                        carX = 360;
                         score = 0;
                     }
                     else if (running == false)
