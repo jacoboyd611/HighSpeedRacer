@@ -19,8 +19,13 @@ namespace HighSpeedRacer
         }
 
         #region Variables   
-        int dashSpace = 0;
+        float score = 0.0F;
+        float highScore = 0.0F;
 
+        int speed = 70;
+
+        int dashSpace = 0;
+        
         int dashesWidth = 10;
         int dashesHeight = 30;
 
@@ -47,6 +52,8 @@ namespace HighSpeedRacer
 
 
         Font drawFont = new Font("Seoge Print", 40, FontStyle.Bold | FontStyle.Italic);
+        Font smallFont = new Font("Seoge Print", 15, FontStyle.Bold | FontStyle.Italic);
+
         SolidBrush yellowBrush = new SolidBrush(Color.Yellow);
         SolidBrush purpleBrush = new SolidBrush(Color.Purple);
         SolidBrush orangeBrush = new SolidBrush(Color.OrangeRed);
@@ -54,14 +61,14 @@ namespace HighSpeedRacer
 
         SolidBrush blackBrush = new SolidBrush(Color.Black);
         SolidBrush whiteBrush = new SolidBrush(Color.White);
-        SolidBrush blueBrush = new SolidBrush(Color.LightSkyBlue);
+        SolidBrush blueBrush = new SolidBrush(Color.Indigo);
 
         #endregion
 
         private void Timer1_Tick(object sender, EventArgs e)
         {
             #region Move dashes
-            if (rightDashesY.Count == 0 || dashSpace == 20)
+            if (rightDashesY.Count == 0 || dashSpace == 8)
             {
                 rightDashesY.Add(150);
                 leftDashesY.Add(0);
@@ -70,13 +77,13 @@ namespace HighSpeedRacer
 
             for (int i = 0; i < rightDashesY.Count; i++)
             {
-                rightDashesY[i] += 5;
+                rightDashesY[i] += 20;
                 if (rightDashesY[i] > this.Height + 100) { rightDashesY.RemoveAt(i); }
             }
 
             for (int i = 0; i < leftDashesY.Count; i++)
             {
-                leftDashesY[i] += 5;
+                leftDashesY[i] += 20;
                 if (leftDashesY[i] > this.Height + 100) { leftDashesY.RemoveAt(i); }
             }
             #endregion
@@ -146,7 +153,12 @@ namespace HighSpeedRacer
                     {
                         countDown.Enabled = true;
                         insturctionLabel.Visible = false;
+                        introLabel.Visible = false;
                     }
+                    break;
+
+                case Keys.Escape:
+                    this.Close();
                     break;
             }
 
@@ -185,12 +197,23 @@ namespace HighSpeedRacer
             //sky
             e.Graphics.FillRectangle(blueBrush, 0, 0, this.Width, 200);
 
+            //background
+
             //car
             e.Graphics.DrawImage(Properties.Resources.car, carX, 460, 150, 75);
 
             if (running)
             {
-                //print obstacles
+                //draw obstacles
+
+
+                //draw score
+                if (score > 1) { e.Graphics.DrawString($"{score.ToString("0.00")}km", drawFont, whiteBrush, 325, 60); }
+                else { e.Graphics.DrawString($"{score.ToString("0.000")}km", drawFont, whiteBrush, 325, 60); }
+
+                if (highScore > 1) { e.Graphics.DrawString($"High Score = {highScore.ToString("0.00")}km", smallFont, yellowBrush, 10, 10); }
+                else { e.Graphics.DrawString($"High Score = {highScore.ToString("0.000")}km", smallFont, yellowBrush, 10, 10); }
+
             }
             else
             {
@@ -211,6 +234,7 @@ namespace HighSpeedRacer
                 #endregion
             }
 
+            #region 3 2 1 count down
             if (counter == 1) { e.Graphics.DrawString("3", drawFont, purpleBrush, 400, 300); }
             else if (counter == 2) { e.Graphics.DrawString("2", drawFont, orangeBrush, 400, 300); }
             else if (counter == 3) { e.Graphics.DrawString("1", drawFont, yellowBrush, 400, 300); }
@@ -223,12 +247,20 @@ namespace HighSpeedRacer
             {
                 countDown.Enabled = false;
                 counter = 0;
+                scoreTimer.Enabled = true;
             }
+            #endregion
         }
 
         private void countDown_Tick(object sender, EventArgs e)
         {
             counter++;
+        }
+
+        private void scoreTimer_Tick(object sender, EventArgs e)
+        {
+            score += 0.001F;
+            if (score > highScore) { highScore = score; }
         }
     }
 }
