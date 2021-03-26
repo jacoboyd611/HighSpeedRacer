@@ -8,14 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Media;
+using System.IO;
 
 namespace HighSpeedRacer
 {
     public partial class Form1 : Form
     {
+        System.Windows.Media.MediaPlayer raceStart = new System.Windows.Media.MediaPlayer();
+        System.Windows.Media.MediaPlayer engine = new System.Windows.Media.MediaPlayer();
+        System.Windows.Media.MediaPlayer backMedia = new System.Windows.Media.MediaPlayer();
+
         public Form1()
         {
             InitializeComponent();
+            raceStart.Open(new Uri(Application.StartupPath + "/Resources/raceStart.wav"));
+            engine.Open(new Uri(Application.StartupPath + "/Resources/engine.wav"));
+            backMedia.Open(new Uri(Application.StartupPath + "/Resources/music.wav"));
+
+            backMedia.MediaEnded += new EventHandler(backMedia_MediaEnded);
         }
 
         #region Variables   
@@ -26,7 +36,9 @@ namespace HighSpeedRacer
         int speed = 70;
 
         int dashSpace = 0;
-        
+        int cloudSpace = 0;
+        int lampPostSpace = 0;
+
         int dashesWidth = 10;
         int dashesHeight = 30;
 
@@ -66,8 +78,18 @@ namespace HighSpeedRacer
         bool rightObstacle = false;
         bool centerObstacle = false;
 
+        bool music = false;
+
         List<int> rightDashesY = new List<int>();
         List<int> leftDashesY = new List<int>();
+
+        List<int> cloudX = new List<int>();
+        List<int> cloudY = new List<int>();
+
+        List<int> lampPostY = new List<int>();
+        List<int> lampPostX = new List<int>();
+        List<int> lampPostHeight = new List<int>();
+        List<int> lampPostWidth = new List<int>();
 
         int[] obstacleHeight = { 50, 50, 50 };
         int[] obstacleWidth = { 100, 70, 100 };
@@ -89,13 +111,53 @@ namespace HighSpeedRacer
         SolidBrush whiteBrush = new SolidBrush(Color.White);
         SolidBrush blueBrush = new SolidBrush(Color.DarkBlue);
 
+        //SoundPlayer startRace = new SoundPlayer(Properties.Resources.raceStart);
+        //SoundPlayer engine = new SoundPlayer(Properties.Resources.engine);
+
         #endregion
 
+        private void backMedia_MediaEnded(object sender, EventArgs e)
+        {
+            backMedia.Stop();
+            backMedia.Play();
+        }
         private void Timer1_Tick(object sender, EventArgs e)
         {
-            #region Move dashes
+            if (music == false)
+            {
+                backMedia.Play();
+                music = true;
+            }
+            #region Move dashes and lamp post
             if (dashes)
             {
+                //lamp posts
+                if (lampPostX.Count == 0 || lampPostSpace == 40)
+                {
+                    lampPostX.Add(225);
+                    lampPostY.Add(100);
+                    lampPostHeight.Add(100);
+                    lampPostWidth.Add(25);
+                    lampPostSpace = 0;
+                }
+
+                for (int i = 0; i < lampPostX.Count; i++)
+                {
+                    lampPostX[i] -= 3;
+                    lampPostY[i] += 3;
+                    lampPostWidth[i] += 1;
+                    lampPostHeight[i] += 3;
+
+                    if (lampPostHeight[i] > this.Height)
+                    {
+                        lampPostX.RemoveAt(i);
+                        lampPostY.RemoveAt(i);
+                        lampPostWidth.RemoveAt(i);
+                        lampPostHeight.RemoveAt(i);
+                    }
+                }
+
+                //dashes
                 if (rightDashesY.Count == 0 || dashSpace == 8)
                 {
                     rightDashesY.Add(150);
@@ -113,6 +175,24 @@ namespace HighSpeedRacer
                 {
                     leftDashesY[i] += 20;
                     if (leftDashesY[i] > this.Height + 100) { leftDashesY.RemoveAt(i); }
+                }
+            }
+            #endregion
+
+            #region Clouds
+            if (cloudX.Count == 0 || cloudSpace == 100)
+            {
+                cloudY.Add(randGen.Next(10, 100));
+                cloudX.Add(-200);
+                cloudSpace = 0;
+            }
+            for (int i = 0; i < cloudX.Count; i++)
+            {
+                cloudX[i] += 5;
+                if (cloudX[i] > this.Width)
+                {
+                    cloudX.RemoveAt(i);
+                    cloudY.RemoveAt(i);
                 }
             }
             #endregion
@@ -174,9 +254,10 @@ namespace HighSpeedRacer
 
                 if (centerObstacle)
                 {
-                    centerObstacleY += 5;
+                    centerObstacleY += 6;
+                    centerObstacleX -= 1; 
                     obstacleHeight[centerOb] += 1;
-                    obstacleWidth[centerOb] += 1;
+                    obstacleWidth[centerOb] += 2;
                 }
 
                 if (rightObstacle)
@@ -218,7 +299,7 @@ namespace HighSpeedRacer
 
                 #endregion
 
-                #region Intersections
+                #region Intersections and clear for end screen
                 Rectangle playerRec = new Rectangle(carX, 460 + 30, 150, 40);
                 Rectangle leftRec = new Rectangle(leftObstacleX, leftObstacleY + 50, obstacleWidth[left], 40);
                 Rectangle centerRec = new Rectangle(centerObstacleX, centerObstacleY + 50, obstacleWidth[centerOb], 40);
@@ -261,6 +342,8 @@ namespace HighSpeedRacer
                 }
             }
             dashSpace++;
+            cloudSpace++;
+            lampPostSpace++;
             Refresh();
         }
 
@@ -296,7 +379,7 @@ namespace HighSpeedRacer
                     break;
 
                 case Keys.Space:
-                    //running = true;
+                    //backMedia.Play();
                     if (endScreen)
                     {
                         dashes = true;
@@ -353,7 +436,20 @@ namespace HighSpeedRacer
             //sky
             e.Graphics.FillRectangle(blueBrush, 0, 0, this.Width, 200);
 
-            //background
+            //moon
+            e.Graphics.DrawImage(Properties.Resources.moon, 750, 20, 75, 75);
+
+            //clouds
+            for (int i = 0; i < cloudX.Count; i++)
+            {
+                e.Graphics.DrawImage(Properties.Resources.cloud, cloudX[i], cloudY[i], 150, 25);
+            }
+
+            //lamp posts
+            for (int i = lampPostX.Count - 1; i > -1; i--)
+            {
+                e.Graphics.DrawImage(Properties.Resources.lampost, lampPostX[i], lampPostY[i], lampPostWidth[i], lampPostHeight[i]);
+            }
 
             //car
             e.Graphics.DrawImage(Properties.Resources.car2, carX, 460, 150, 75);
@@ -409,7 +505,8 @@ namespace HighSpeedRacer
                     else { e.Graphics.DrawString($"High Score = {highScore.ToString("0.000")}km", smallFont, yellowBrush, 330, 125); }
 
                     if (highScore > 1) { e.Graphics.DrawString($"Your score = {score.ToString("0.00")}km", smallFont, whiteBrush, 330, 150); }
-                    else { e.Graphics.DrawString($"Your score = {score.ToString("0.000")}km", smallFont, whiteBrush, 330, 150); }                  
+                    else { e.Graphics.DrawString($"Your score = {score.ToString("0.000")}km", smallFont, whiteBrush, 330, 150); }
+                    e.Graphics.DrawString($"Press space to continue", smallFont, whiteBrush, 330, 250);
                 }
             }
             #region 3 2 1 count down
@@ -432,7 +529,17 @@ namespace HighSpeedRacer
 
         private void countDown_Tick(object sender, EventArgs e)
         {
-            counter++;               
+            counter++;
+            if (counter < 5)
+            {                
+                raceStart.Stop();
+                raceStart.Play();
+                if (counter == 4)
+                {
+                    engine.Stop();
+                    engine.Play();
+                }
+            }
         }
 
         private void scoreTimer_Tick(object sender, EventArgs e)
