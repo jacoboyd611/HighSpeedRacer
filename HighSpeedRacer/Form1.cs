@@ -221,7 +221,7 @@ namespace HighSpeedRacer
                 #endregion
 
                 #region Deicde lane and frenquency
-                if (obstacleCounter > obstacleFrenq)
+                if (obstacleCounter >= obstacleFrenq)
                 {
                     int i = randGen.Next(1, 4);
                     if(i == 1)
@@ -329,8 +329,8 @@ namespace HighSpeedRacer
                     rightObstacleY = 150;
                     obstacleHeight[right] = 50;
                     obstacleWidth[right] = 100;
-
-                    carX = 360;
+                    lastScore = 0;
+                    obstacleFrenq = 50;
                 }
                 #endregion
 
@@ -338,6 +338,7 @@ namespace HighSpeedRacer
                 if (score > lastScore + 0.2)
                 {
                     obstacleFrenq -= 5;
+                    speed = speed + 5;
                     lastScore = score;
                 }
             }
@@ -386,6 +387,7 @@ namespace HighSpeedRacer
                         endScreen = false;
                         insturctionLabel.Visible = true;
                         introLabel.Visible = true;
+                        carX = 360;
                         score = 0;
                     }
                     else if (running == false)
