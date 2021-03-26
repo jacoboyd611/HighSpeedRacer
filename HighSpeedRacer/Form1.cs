@@ -65,7 +65,7 @@ namespace HighSpeedRacer
 
         int counter = 0;
         int obstacleCounter = 0;
-        int obstacleFrenq = 40;
+        int obstacleFrenq = 50;
 
         bool running = false;
         bool endScreen = false;
@@ -335,7 +335,7 @@ namespace HighSpeedRacer
                 #endregion
 
                 //increase car frequncy 
-                if (score > lastScore + 0.5)
+                if (score > lastScore + 0.2)
                 {
                     obstacleFrenq -= 5;
                     lastScore = score;
@@ -544,7 +544,7 @@ namespace HighSpeedRacer
 
         private void scoreTimer_Tick(object sender, EventArgs e)
         {
-            score += 0.001F;
+            score += 0.002F;
             if (score > highScore) { highScore = score; }
         }
     }
