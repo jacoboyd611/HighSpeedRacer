@@ -93,6 +93,15 @@ namespace HighSpeedRacer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream crash {
+            get {
+                return ResourceManager.GetStream("crash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream engine {
             get {
                 return ResourceManager.GetStream("engine", resourceCulture);
@@ -134,6 +143,15 @@ namespace HighSpeedRacer.Properties {
         internal static System.IO.UnmanagedMemoryStream raceStart {
             get {
                 return ResourceManager.GetStream("raceStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream skid {
+            get {
+                return ResourceManager.GetStream("skid", resourceCulture);
             }
         }
     }

@@ -17,15 +17,20 @@ namespace HighSpeedRacer
         System.Windows.Media.MediaPlayer raceStart = new System.Windows.Media.MediaPlayer();
         System.Windows.Media.MediaPlayer engine = new System.Windows.Media.MediaPlayer();
         System.Windows.Media.MediaPlayer backMedia = new System.Windows.Media.MediaPlayer();
+        System.Windows.Media.MediaPlayer skid = new System.Windows.Media.MediaPlayer();
+        System.Windows.Media.MediaPlayer crash = new System.Windows.Media.MediaPlayer();
 
         public Form1()
         {
             InitializeComponent();
             raceStart.Open(new Uri(Application.StartupPath + "/Resources/raceStart.wav"));
             engine.Open(new Uri(Application.StartupPath + "/Resources/engine.wav"));
-            backMedia.Open(new Uri(Application.StartupPath + "/Resources/music.wav"));
 
+            backMedia.Open(new Uri(Application.StartupPath + "/Resources/music.wav"));
             backMedia.MediaEnded += new EventHandler(backMedia_MediaEnded);
+
+            crash.Open(new Uri(Application.StartupPath + "/Resources/crash.wav"));
+            skid.Open(new Uri(Application.StartupPath + "/Resources/skid.wav"));
         }
 
         #region Variables   
@@ -307,6 +312,12 @@ namespace HighSpeedRacer
 
                 if (playerRec.IntersectsWith(leftRec) || playerRec.IntersectsWith(centerRec) || playerRec.IntersectsWith(rightRec))
                 {
+                    skid.Stop();
+                    skid.Play();
+
+                    crash.Stop();
+                    crash.Play();
+
                     running = false;
                     endScreen = true;
                     scoreTimer.Enabled = false;

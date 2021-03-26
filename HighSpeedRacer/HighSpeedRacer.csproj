@@ -98,9 +98,6 @@
     <None Include="Resources\lampost.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\raceStart1.wav" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\raceStart.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -115,6 +112,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\music.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\crash.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\skid.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
