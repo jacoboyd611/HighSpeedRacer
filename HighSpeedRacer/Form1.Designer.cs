@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.insturctionLabel = new System.Windows.Forms.Label();
             this.countDown = new System.Windows.Forms.Timer(this.components);
@@ -90,6 +91,7 @@
             this.Controls.Add(this.introLabel);
             this.Controls.Add(this.insturctionLabel);
             this.DoubleBuffered = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "High Speed Racer";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
