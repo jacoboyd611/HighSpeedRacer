@@ -29,6 +29,8 @@ namespace HighSpeedRacer
 
         public Form1()
         {
+            Form2 f2 = new Form2();
+            f2.Show();
             InitializeComponent();
             raceStart.Open(new Uri(Application.StartupPath + "/Resources/raceStart.wav"));
             engine.Open(new Uri(Application.StartupPath + "/Resources/engine.wav"));
@@ -435,9 +437,9 @@ namespace HighSpeedRacer
             e.Graphics.FillRectangle(blackBrush, 400, 0, 50, this.Height);
 
             e.Graphics.RotateTransform(-40);
-            e.Graphics.FillRectangle(blackBrush, 475, 200, 50, this.Height);
-            e.Graphics.FillRectangle(blackBrush, 425, 200, 50, this.Height);
-            e.Graphics.FillRectangle(blackBrush, 375, 200, 50, this.Height);
+            e.Graphics.FillRectangle(blackBrush, 475, 200, 50, this.Height + 100);
+            e.Graphics.FillRectangle(blackBrush, 425, 200, 50, this.Height + 100);
+            e.Graphics.FillRectangle(blackBrush, 375, 200, 50, this.Height + 100);
 
             e.Graphics.RotateTransform(20);
             e.Graphics.FillRectangle(blackBrush, 250, 200, 350, this.Height);
