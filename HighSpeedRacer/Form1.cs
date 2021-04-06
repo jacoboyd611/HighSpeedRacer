@@ -1,4 +1,11 @@
-﻿using System;
+﻿///Jacob Boyd
+///Mr. T
+///ICS3U
+///April 6th
+///8bit style subway surfers/temple run game were the player must dodge traffic coming towards them in 3 different lanes
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -130,9 +137,11 @@ namespace HighSpeedRacer
         {
             if (music == false)
             {
+                //background music
                 backMedia.Play();
                 music = true;
             }
+
             #region Move dashes and lamp post
             if (dashes)
             {
@@ -391,9 +400,9 @@ namespace HighSpeedRacer
                     break;
 
                 case Keys.Space:
-                    //backMedia.Play();
                     if (endScreen)
                     {
+                        //changes from endscreen back to main menu
                         dashes = true;
                         endScreen = false;
                         insturctionLabel.Visible = true;
@@ -402,7 +411,8 @@ namespace HighSpeedRacer
                         score = 0;
                     }
                     else if (running == false)
-                    {                        
+                    {
+                        //start game
                         countDown.Enabled = true;
                         insturctionLabel.Visible = false;
                         introLabel.Visible = false;
@@ -496,7 +506,7 @@ namespace HighSpeedRacer
             }
             else
             {
-                #region Title
+                #region draw title
                 int startingPoint = 275;
                 e.Graphics.DrawString("S", drawFont, purpleBrush, startingPoint, 60);
                 e.Graphics.DrawString("P", drawFont, orangeBrush, startingPoint + 25, 60);
@@ -542,6 +552,7 @@ namespace HighSpeedRacer
 
         private void countDown_Tick(object sender, EventArgs e)
         {
+            //start countdown timer
             counter++;
             if (counter < 5)
             {                
@@ -557,6 +568,7 @@ namespace HighSpeedRacer
 
         private void scoreTimer_Tick(object sender, EventArgs e)
         {
+            //score counter
             score += 0.002F;
             if (score > highScore) { highScore = score; }
         }
